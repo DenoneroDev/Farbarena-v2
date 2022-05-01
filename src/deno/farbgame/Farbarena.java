@@ -150,7 +150,7 @@ public class Farbarena extends Arena {
 
         checkRanks();
 
-        }
+    }
     public void checkRanks() {
 
         Location FloorMin = FloorMap.get("von");
@@ -187,7 +187,7 @@ public class Farbarena extends Arena {
                     if(getLevel().getBlock(loc).getId() == Block.LIGHT_WEIGHTED_PRESSURE_PLATE) {
 
                         getLevel().setBlock(loc, Block.get(Block.AIR));
-                        PodestMap.put("first", loc);
+                         PodestMap.put("first", loc);
 
                     }
 
@@ -523,35 +523,38 @@ public class Farbarena extends Arena {
 
             for(int i = 0; i < 2; i++) {
 
-                String[] BoardTypes = {"first", "second"};
                 Block b = (c == 16) ? DefaultBoardBlock : Block.get(Block.WOOL, c);
 
-                Location min = BoardMap.get(BoardTypes[i] + "Board").get("von");
-                Location max = BoardMap.get(BoardTypes[i] + "Board").get("bis");
+                BoardMap.forEach((BoardName, Data) -> {
 
-                for(int y = (int) min.y; y <= max.y; y++) {
+                    Location min = BoardMap.get(BoardName).get("von");
+                    Location max = BoardMap.get(BoardName).get("bis");
 
-                    if(min.x == max.x) {
+                    for(int y = (int) min.y; y <= max.y; y++) {
 
-                        for(int z = (int) min.z; z <= max.z; z++) {
+                        if(min.x == max.x) {
 
-                            Location loc = new Location(min.x, y, z);
-                            getLevel().setBlock(loc, b);
+                            for(int z = (int) min.z; z <= max.z; z++) {
 
-                        }
+                                Location loc = new Location(min.x, y, z);
+                                getLevel().setBlock(loc, b);
 
-                    } else {
+                            }
 
-                        for(int x = (int) min.x; x <= max.x; x++) {
+                        } else {
 
-                            Location loc = new Location(x, y, min.z);
-                            getLevel().setBlock(loc, b);
+                            for(int x = (int) min.x; x <= max.x; x++) {
+
+                                Location loc = new Location(x, y, min.z);
+                                getLevel().setBlock(loc, b);
+
+                            }
 
                         }
 
                     }
 
-                }
+                });
 
             }
 

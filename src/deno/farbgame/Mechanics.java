@@ -23,28 +23,32 @@ public class Mechanics {
         for(Arena arena : Main.arenen) {
 
             arenen.add((Farbarena) arena);
-            String[] watcher = Main.config.getString(Main.GameType + "." + arena.getName() + ".watcher").split(";");
+            ConfigSection ArenaSection = Main.config.getSection(Main.GameType + "." + arena.getName());
+            ConfigSection floor = ArenaSection.getSection("floor");
+            ConfigSection CustomFloor = ArenaSection.getSection("customFloor");
+            ConfigSection bords = ArenaSection.getSection("boards");
+            ConfigSection podest = ArenaSection.getSection("podest");
+            String[] watcher = ArenaSection.getString("watcher").split(";");
+
             ((Farbarena) arena).WatcherSpawn = new Location(Integer.parseInt(watcher[0]), Integer.parseInt(watcher[1]), Integer.parseInt(watcher[2]), Integer.parseInt(watcher[3]));
-            ConfigSection CustomFloor = Main.config.getSection(Main.GameType + "." + arena.getName() + ".customFloor");
             ((Farbarena) arena).CustomFloorMap.put("von", new Location(Integer.parseInt(CustomFloor.getString("von").split(";")[0]), Integer.parseInt(CustomFloor.getString("von").split(";")[1]), Integer.parseInt(CustomFloor.getString("von").split(";")[2])));
             ((Farbarena) arena).CustomFloorMap.put("bis", new Location(Integer.parseInt(CustomFloor.getString("bis").split(";")[0]), Integer.parseInt(CustomFloor.getString("bis").split(";")[1]), Integer.parseInt(CustomFloor.getString("bis").split(";")[2])));
-            ConfigSection floor = Main.config.getSection(Main.GameType + "." + arena.getName() + ".floor");
             ((Farbarena) arena).FloorMap.put("von", new Location(Integer.parseInt(floor.getString("von").split(";")[0]), Integer.parseInt(floor.getString("von").split(";")[1]), Integer.parseInt(floor.getString("von").split(";")[2])));
             ((Farbarena) arena).FloorMap.put("bis", new Location(Integer.parseInt(floor.getString("bis").split(";")[0]), Integer.parseInt(floor.getString("bis").split(";")[1]), Integer.parseInt(floor.getString("bis").split(";")[2])));
-            ConfigSection FirstBoard = Main.config.getSection(Main.GameType + "." + arena.getName() + ".firstBoard");
-            HashMap<String, Location> FirstBoardMap = new HashMap<>();
-            FirstBoardMap.put("von", new Location(Integer.parseInt(FirstBoard.getString("von").split(";")[0]), Integer.parseInt(FirstBoard.getString("von").split(";")[1]), Integer.parseInt(FirstBoard.getString("von").split(";")[2])));
-            FirstBoardMap.put("bis", new Location(Integer.parseInt(FirstBoard.getString("bis").split(";")[0]), Integer.parseInt(FirstBoard.getString("bis").split(";")[1]), Integer.parseInt(FirstBoard.getString("bis").split(";")[2])));
-            ((Farbarena) arena).BoardMap.put("firstBoard", FirstBoardMap);
-            ConfigSection SecondBoard = Main.config.getSection(Main.GameType + "." + arena.getName() + ".secondBoard");
-            HashMap<String, Location> SecondBoardMap = new HashMap<>();
-            SecondBoardMap.put("von", new Location(Integer.parseInt(SecondBoard.getString("von").split(";")[0]), Integer.parseInt(SecondBoard.getString("von").split(";")[1]), Integer.parseInt(SecondBoard.getString("von").split(";")[2])));
-            SecondBoardMap.put("bis", new Location(Integer.parseInt(SecondBoard.getString("bis").split(";")[0]), Integer.parseInt(SecondBoard.getString("bis").split(";")[1]), Integer.parseInt(SecondBoard.getString("bis").split(";")[2])));
-            ((Farbarena) arena).BoardMap.put("secondBoard", SecondBoardMap);
             ((Farbarena) arena).DefaultBoardBlock = Block.get(Integer.parseInt(Main.config.getString(Main.GameType + "." + arena.getName() + ".defaultBlockID").split(":")[0]), Integer.parseInt(Main.config.getString(Main.GameType + "." + arena.getName() + ".defaultBlockID").split(":")[1]));
-            ConfigSection podest = Main.config.getSection(Main.GameType + "." + arena.getName() + ".podest");
             ((Farbarena) arena).PodestMap.put("von", new Location(Integer.parseInt(podest.getString("von").split(";")[0]), Integer.parseInt(podest.getString("von").split(";")[1]), Integer.parseInt(podest.getString("von").split(";")[2])));
             ((Farbarena) arena).PodestMap.put("bis", new Location(Integer.parseInt(podest.getString("bis").split(";")[0]), Integer.parseInt(podest.getString("bis").split(";")[1]), Integer.parseInt(podest.getString("bis").split(";")[2])));
+
+            bords.forEach((BoardName, Data) -> {
+
+                HashMap<String, Location> BoardMap = new HashMap<>();
+                ConfigSection data = (ConfigSection) Data;
+                BoardMap.put("von", new Location(Integer.parseInt(data.getString("von").split(";")[0]), Integer.parseInt(data.getString("von").split(";")[1]), Integer.parseInt(data.getString("von").split(";")[2])));
+                BoardMap.put("bis", new Location(Integer.parseInt(data.getString("bis").split(";")[0]), Integer.parseInt(data.getString("bis").split(";")[1]), Integer.parseInt(data.getString("bis").split(";")[2])));
+                ((Farbarena) arena).BoardMap.put(BoardName, BoardMap);
+
+            });
+
         }
 
     }

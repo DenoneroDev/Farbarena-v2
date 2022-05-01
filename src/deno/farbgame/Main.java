@@ -35,7 +35,7 @@ public class Main extends PluginBase {
 
         ConfigSection ConfigArenen = config.getSection(GameType.getName());
         arenen = GameMaster.Spielfelder.getOrDefault(GameType, new ArrayList<>());
-        ConfigArenen.getSections().forEach((feldname, config) -> arenen.add(new Farbarena((ConfigSection) config, feldname, GameType)));
+        ConfigArenen.forEach((feldname, config) -> arenen.add(new Farbarena((ConfigSection) config, feldname, GameType)));
         mechanics = new Mechanics();
 
         Entity.registerEntity("Farbmeister", Farbmeister.class);

@@ -1,7 +1,7 @@
 name: Farbgame
 author: denonerodev
 main: deno.farbgame.Main
-version: 0.0.3
+version: 2.1
 api: ["1.0.12"]
 load: POSTWORLD
 depend:
